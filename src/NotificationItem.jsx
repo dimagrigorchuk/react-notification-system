@@ -249,6 +249,8 @@ var NotificationItem = createReactClass({
     var actionButton = null;
     var title = null;
     var message = null;
+    var content;
+    var getContentComponent = notification.getContentComponent;
 
     if (this.state.visible) {
       className += ' notification-visible';
@@ -315,13 +317,21 @@ var NotificationItem = createReactClass({
     if (notification.children) {
       actionButton = notification.children;
     }
+    
+    if (getContentComponent) {
+      content = getContentComponent(notification.uid);
+    } else {
+      content = [
+        title,
+        message,
+        dismiss,
+        actionButton
+      ];
+    }
 
     return (
       <div className={ className } onClick={ this._dismiss } onMouseEnter={ this._handleMouseEnter } onMouseLeave={ this._handleMouseLeave } style={ notificationStyle }>
-        { title }
-        { message }
-        { dismiss }
-        { actionButton }
+        { content }
       </div>
     );
   }
